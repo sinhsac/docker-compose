@@ -1,0 +1,39 @@
+version: '3.8'
+
+networks:
+  postgres:
+    driver: bridge
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+  pgAdmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=sinhsac@live.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=6969
+    ports:
+      - '6969:6969'
+    volumes: 
+      - db:/var/lib/pgAdmin
+    networks:
+      - postgres
+
+volumes:
+  pgAdmin:
+    driver: local
+  db:
+    driver: local
